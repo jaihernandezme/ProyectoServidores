@@ -1,0 +1,11 @@
+{
+  "name": "metadata-service",
+  "version": "1.0.0",
+  "description": "Lambda function to extract and save video metadata.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
