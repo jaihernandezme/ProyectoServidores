@@ -9,3 +9,8 @@ variable "cloudfront_distribution_arn" {
   description = "El ARN de la distribución de CloudFront."
   type        = string
 }
+
+variable "environment" {
+  description = "El entorno de despliegue."
+  type        = string
+}
