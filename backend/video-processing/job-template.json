@@ -1,0 +1,85 @@
+{
+  "Settings": {
+    "OutputGroups": [
+      {
+        "Name": "Apple HLS",
+        "Outputs": [
+          {
+            "Preset": "System-Avc1080p_16x9_30fps_5000kbps_h264",
+            "NameModifier": "_1080p"
+          },
+          {
+            "Preset": "System-Avc720p_16x9_30fps_3500kbps_h264",
+            "NameModifier": "_720p"
+          },
+          {
+            "Preset": "System-Avc480p_16x9_30fps_1500kbps_h264",
+            "NameModifier": "_480p"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "HLS_GROUP_SETTINGS",
+          "HlsGroupSettings": {
+            "SegmentLength": 10,
+            "Destination": "s3://<PROCESSED_BUCKET>/videos/",
+            "MinSegmentLength": 0,
+            "TargetDurationCompatibilityMode": "RFC4337_COMPLIANT"
+          }
+        }
+      },
+      {
+        "Name": "File Group",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "RAW"
+            },
+            "VideoDescription": {
+              "CodecSettings": {
+                "Codec": "FRAME_CAPTURE",
+                "FrameCaptureSettings": {
+                  "FramerateNumerator": 1,
+                  "FramerateDenominator": 10,
+                  "MaxCaptures": 3,
+                  "Quality": 80
+                }
+              }
+            },
+            "NameModifier": "_thumbnail"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "FILE_GROUP_SETTINGS",
+          "FileGroupSettings": {
+            "Destination": "s3://<PROCESSED_BUCKET>/thumbnails/"
+          }
+        }
+      }
+    ],
+    "TimecodeConfig": {
+      "Source": "ZEROBASED"
+    },
+    "Inputs": [
+      {
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "Offset": 0,
+            "DefaultSelection": "DEFAULT",
+            "ProgramSelection": 1
+          }
+        },
+        "VideoSelector": {
+          "ColorSpace": "FOLLOW"
+        },
+        "FilterEnable": "AUTO",
+        "PsiControl": "USE_PSI",
+        "FilterStrength": 0,
+        "DeblockFilter": "DISABLED",
+        "DenoiseFilter": "DISABLED",
+        "TimecodeSource": "ZEROBASED",
+        "FileInput": "s3://<RAW_BUCKET>/<INPUT_KEY>"
+      }
+    ]
+  },
+  "Role": "<MEDIA_CONVERT_ROLE_ARN>"
+}

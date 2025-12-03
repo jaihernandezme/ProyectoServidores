@@ -1,0 +1,63 @@
+// frontend/script.js
+
+const API_ENDPOINT = "__API_ENDPOINT__";
+
+document.getElementById('upload-button').addEventListener('click', async () => {
+    const fileInput = document.getElementById('video-file');
+    const file = fileInput.files[0];
+    if (!file) {
+        alert('Please select a file to upload.');
+        return;
+    }
+
+    const status = document.getElementById('upload-status');
+    status.textContent = 'Requesting presigned URL...';
+
+    try {
+        // 1. Get Presigned URL from our backend
+        const presignedUrlResponse = await fetch(`${API_ENDPOINT}/get-presigned-url`, { // Assuming this endpoint exists
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileName: file.name }),
+        });
+        const { uploadUrl, key } = await presignedUrlResponse.json();
+
+        // 2. Upload file to S3
+        status.textContent = 'Uploading to S3...';
+        await fetch(uploadUrl, {
+            method: 'PUT',
+            body: file,
+            headers: { 'Content-Type': file.type },
+        });
+
+        status.textContent = `Upload successful! Video ID: ${key}`;
+    } catch (error) {
+        status.textContent = `Upload failed: ${error.message}`;
+        console.error('Upload error:', error);
+    }
+});
+
+document.getElementById('play-button').addEventListener('click', async () => {
+    const videoId = document.getElementById('video-id').value;
+    if (!videoId) {
+        alert('Please enter a Video ID.');
+        return;
+    }
+
+    try {
+        // 1. Get Signed URL from our backend
+        const signedUrlResponse = await fetch(`${API_ENDPOINT}/videos/${videoId}/play`);
+        const { signedUrl } = await signedUrlResponse.json();
+
+        // 2. Load the video into the player
+        const player = videojs('my-video');
+        player.src({
+            src: signedUrl,
+            type: 'application/x-mpegURL' // For HLS
+        });
+        player.play();
+    } catch (error) {
+        alert(`Failed to get video URL: ${error.message}`);
+        console.error('Playback error:', error);
+    }
+});

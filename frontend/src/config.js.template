@@ -1,0 +1,3 @@
+// frontend/src/config.js.template
+
+export const API_ENDPOINT = "__API_ENDPOINT__";
