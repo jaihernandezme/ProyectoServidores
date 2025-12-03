@@ -14,3 +14,11 @@ output "api_endpoint" {
   description = "El endpoint de la API Gateway."
   value       = aws_apigatewayv2_api.main.api_endpoint
 }
+
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.main.domain_name
+}
+
+output "cloudfront_key_pair_id" {
+  value = aws_cloudfront_public_key.main.id
+}
