@@ -19,9 +19,10 @@ provider "aws" {
 
 # Módulos de Infraestructura
 module "s3_storage" {
-  source             = "./modules/storage"
-  environment        = var.environment
-  cloudfront_oac_arn = module.network.cloudfront_oac_arn
+  source                      = "./modules/storage"
+  environment                 = var.environment
+  cloudfront_oac_arn          = module.network.cloudfront_oac_arn
+  cloudfront_distribution_arn = module.network.cloudfront_distribution_arn
 }
 
 module "databases" {

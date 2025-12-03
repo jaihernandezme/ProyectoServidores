@@ -26,7 +26,7 @@ resource "aws_s3_bucket_policy" "processed_oac_access" {
         Resource  = "${aws_s3_bucket.processed.arn}/*",
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = var.cloudfront_oac_arn
+            "AWS:SourceArn" = var.cloudfront_distribution_arn
           }
         }
       }
