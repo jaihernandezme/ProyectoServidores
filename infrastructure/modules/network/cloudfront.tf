@@ -1,13 +1,20 @@
 # infrastructure/modules/network/cloudfront.tf
 
-# 3. Crear un grupo de claves que contenga la clave pública
+# 1. Crear una clave pública en CloudFront a partir de la clave PEM
+resource "aws_cloudfront_public_key" "main" {
+  comment     = "VOD Platform Public Key"
+  name        = "vod-${var.environment}-public-key"
+  encoded_key = var.cloudfront_public_key_pem
+}
+
+# 2. Crear un grupo de claves que contenga la clave pública
 resource "aws_cloudfront_key_group" "main" {
   comment = "VOD Platform Key Group"
-  items   = [var.cloudfront_public_key_id]
+  items   = [aws_cloudfront_public_key.main.id]
   name    = "vod-${var.environment}-key-group"
 }
 
-# 4. Crear un Control de Acceso de Origen (OAC) para el bucket de videos
+# 3. Crear un Control de Acceso de Origen (OAC) para el bucket de videos
 resource "aws_cloudfront_origin_access_control" "processed_oac" {
   name                              = "VOD-${var.environment}-OAC-Processed"
   description                       = "OAC for the processed videos bucket"
@@ -16,7 +23,7 @@ resource "aws_cloudfront_origin_access_control" "processed_oac" {
   signing_protocol                  = "sigv4"
 }
 
-# 5. Definir la distribución de CloudFront
+# 4. Definir la distribución de CloudFront
 resource "aws_cloudfront_distribution" "main" {
   enabled             = true
   comment             = "VOD Platform CDN"

@@ -1,51 +1,61 @@
 # infrastructure/modules/compute/variables.tf
 
+variable "environment" {
+  description = "El entorno de despliegue (ej. dev, prod)."
+  type        = string
+}
+
 variable "raw_bucket_name" {
-  description = "El nombre del bucket S3 para videos crudos."
+  description = "Nombre del bucket S3 para videos crudos."
   type        = string
 }
 
 variable "processed_bucket_name" {
-  description = "El nombre del bucket S3 para videos procesados."
+  description = "Nombre del bucket S3 para videos procesados."
   type        = string
 }
 
 variable "mediaconvert_role_arn" {
-  description = "El ARN del rol de IAM para MediaConvert."
+  description = "ARN del rol de IAM para MediaConvert."
   type        = string
 }
 
 variable "sns_topic_arn" {
-  description = "El ARN del tema de SNS para notificaciones."
+  description = "ARN del tópico SNS para notificaciones de IA."
   type        = string
 }
 
 variable "sns_role_arn" {
-  description = "El ARN del rol de IAM para que los servicios de IA publiquen en SNS."
+  description = "ARN del rol de IAM para que los servicios de IA publiquen en SNS."
   type        = string
 }
 
 variable "dynamodb_table_name" {
-  description = "El nombre de la tabla de DynamoDB."
+  description = "Nombre de la tabla DynamoDB para metadatos."
   type        = string
 }
 
 variable "opensearch_endpoint" {
-  description = "El endpoint del cluster de OpenSearch."
+  description = "Endpoint del clúster de OpenSearch."
   type        = string
 }
 
 variable "cloudfront_public_key_id" {
-  description = "El ID de la clave pública de CloudFront."
+  description = "ID de la clave pública de CloudFront para firmar URLs."
   type        = string
 }
 
 variable "cloudfront_private_key_secret_arn" {
-  description = "El ARN del secreto que almacena la clave privada de CloudFront."
+  description = "ARN del secreto en Secrets Manager con la clave privada de CloudFront."
   type        = string
 }
 
-variable "environment" {
-  description = "El entorno de despliegue."
+variable "lambda_exec_role_arn" {
+  description = "ARN del rol de ejecución de Lambda."
+  type        = string
+}
+
+variable "ai_service_role_arn" {
+  description = "ARN del rol del servicio de IA."
   type        = string
 }

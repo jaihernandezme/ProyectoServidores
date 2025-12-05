@@ -1,11 +1,11 @@
 # infrastructure/modules/database/variables.tf
 
-variable "search_principal_arn" {
-  description = "El ARN del principal que tendrá acceso a OpenSearch."
+variable "environment" {
+  description = "El entorno de despliegue (ej. dev, prod)."
   type        = string
 }
 
-variable "environment" {
-  description = "El entorno de despliegue."
+variable "search_principal_arn" {
+  description = "El ARN del principal de IAM que puede acceder a OpenSearch."
   type        = string
 }

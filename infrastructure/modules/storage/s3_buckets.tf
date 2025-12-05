@@ -3,10 +3,12 @@
 # 1. Bucket para videos crudos (uploads)
 resource "aws_s3_bucket" "raw" {
   bucket = "vod-${var.environment}-raw"
+}
 
-  # Habilitar versionado para seguridad
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "raw_versioning" {
+  bucket = aws_s3_bucket.raw.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
@@ -37,19 +39,29 @@ resource "aws_s3_bucket_policy" "processed_oac_access" {
 # 2. Bucket para videos procesados (HLS/DASH)
 resource "aws_s3_bucket" "processed" {
   bucket = "vod-${var.environment}-processed"
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "processed_versioning" {
+  bucket = aws_s3_bucket.processed.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
 # 3. Bucket para el frontend estático (React/Next.js)
 resource "aws_s3_bucket" "frontend" {
   bucket = "vod-${var.environment}-frontend"
+}
 
-  website {
-    index_document = "index.html"
-    error_document = "index.html" # Para SPAs, redirige todo a index.html
+resource "aws_s3_bucket_website_configuration" "frontend_website" {
+  bucket = aws_s3_bucket.frontend.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
   }
 }
 

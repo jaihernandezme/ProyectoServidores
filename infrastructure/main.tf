@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -21,7 +21,7 @@ provider "aws" {
 module "s3_storage" {
   source                      = "./modules/storage"
   environment                 = var.environment
-  cloudfront_oac_arn          = module.network.cloudfront_oac_arn
+  cloudfront_oac_arn          = module.network.cloudfront_oac_id
   cloudfront_distribution_arn = module.network.cloudfront_distribution_arn
 }
 
@@ -36,12 +36,19 @@ module "secrets" {
   environment = var.environment
 }
 
+module "iam_roles" {
+  source      = "./modules/iam_roles"
+  environment = var.environment
+}
+
 module "compute_services" {
   source                            = "./modules/compute"
   environment                       = var.environment
   raw_bucket_name                   = module.s3_storage.raw_bucket_name
   processed_bucket_name             = module.s3_storage.processed_bucket_name
   mediaconvert_role_arn             = module.iam_roles.mediaconvert_role_arn
+  lambda_exec_role_arn              = module.iam_roles.lambda_exec_role_arn
+  ai_service_role_arn               = module.iam_roles.ai_service_role_arn
   sns_topic_arn                     = module.ai_iam.sns_topic_arn
   sns_role_arn                      = module.ai_iam.sns_role_arn
   dynamodb_table_name               = module.databases.dynamodb_table_name
@@ -63,6 +70,7 @@ module "network" {
   processed_bucket_regional_domain_name = module.s3_storage.processed_bucket_regional_domain_name
   signer_service_lambda_arn             = module.compute_services.signer_service_lambda_arn
   upload_service_lambda_arn             = module.compute_services.upload_service_lambda_arn
+  cloudfront_public_key_pem             = module.secrets.cloudfront_public_key_pem
   cloudfront_public_key_id              = module.secrets.cloudfront_public_key_id
 }
 

@@ -16,7 +16,7 @@ resource "aws_dynamodb_table" "video_metadata" {
 }
 
 # 2. Colección de Amazon OpenSearch Serverless para búsquedas
-resource "aws_opensearchserverless_collection" "search_collection" {
+resource "aws_opensearch_collection" "search_collection" {
   name = "vod-${var.environment}-search"
   type = "SEARCH"
 }
@@ -24,7 +24,7 @@ resource "aws_opensearchserverless_collection" "search_collection" {
 # Política de acceso a datos para OpenSearch.
 # Por ahora, permite acceso total a cualquier principal de AWS.
 # En una implementación real, esto se restringiría al ARN del rol de Lambda.
-resource "aws_opensearchserverless_access_policy" "data_access" {
+resource "aws_opensearch_access_policy" "data_access" {
   name = "vod-${var.environment}-data-access"
   type = "data"
   policy = jsonencode([
