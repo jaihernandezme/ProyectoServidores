@@ -31,6 +31,11 @@ module "databases" {
   search_principal_arn = module.ai_iam.ai_service_role_arn
 }
 
+module "secrets" {
+  source      = "./modules/secrets"
+  environment = var.environment
+}
+
 module "compute_services" {
   source                            = "./modules/compute"
   environment                       = var.environment
@@ -41,9 +46,8 @@ module "compute_services" {
   sns_role_arn                      = module.ai_iam.sns_role_arn
   dynamodb_table_name               = module.databases.dynamodb_table_name
   opensearch_endpoint               = module.databases.opensearch_endpoint
-  cloudfront_domain_name            = module.network.cloudfront_domain_name
-  cloudfront_public_key_id          = module.network.cloudfront_public_key_id
-  cloudfront_private_key_secret_arn = module.network.cloudfront_private_key_secret_arn
+  cloudfront_public_key_id          = module.secrets.cloudfront_public_key_id
+  cloudfront_private_key_secret_arn = module.secrets.cloudfront_private_key_secret_arn
 }
 
 
@@ -59,6 +63,7 @@ module "network" {
   processed_bucket_regional_domain_name = module.s3_storage.processed_bucket_regional_domain_name
   signer_service_lambda_arn             = module.compute_services.signer_service_lambda_arn
   upload_service_lambda_arn             = module.compute_services.upload_service_lambda_arn
+  cloudfront_public_key_id              = module.secrets.cloudfront_public_key_id
 }
 
 # Disparadores de Eventos

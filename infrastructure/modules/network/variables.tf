@@ -25,3 +25,8 @@ variable "upload_service_lambda_arn" {
   description = "El ARN de la función Lambda para generar URLs prefirmadas de S3."
   type        = string
 }
+
+variable "cloudfront_public_key_id" {
+  description = "El ID de la clave pública de CloudFront."
+  type        = string
+}
