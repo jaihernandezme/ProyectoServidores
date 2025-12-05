@@ -1,22 +1,9 @@
 # infrastructure/modules/network/cloudfront.tf
 
-# 1. Generar una clave privada RSA de 2048 bits para firmar las URLs
-resource "tls_private_key" "cloudfront_signer" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-
-# 2. Crear una clave pública en AWS a partir de la clave generada
-resource "aws_cloudfront_public_key" "main" {
-  comment     = "VOD Platform Signing Key"
-  encoded_key = tls_private_key.cloudfront_signer.public_key_pem
-  name        = "vod-${var.environment}-signing-key"
-}
-
 # 3. Crear un grupo de claves que contenga la clave pública
 resource "aws_cloudfront_key_group" "main" {
   comment = "VOD Platform Key Group"
-  items   = [aws_cloudfront_public_key.main.id]
+  items   = [var.cloudfront_public_key_id]
   name    = "vod-${var.environment}-key-group"
 }
 

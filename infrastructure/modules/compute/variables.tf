@@ -35,11 +35,6 @@ variable "opensearch_endpoint" {
   type        = string
 }
 
-variable "cloudfront_domain_name" {
-  description = "El nombre de dominio de la distribución de CloudFront."
-  type        = string
-}
-
 variable "cloudfront_public_key_id" {
   description = "El ID de la clave pública de CloudFront."
   type        = string

@@ -43,7 +43,6 @@ resource "aws_lambda_function" "signer_service" {
 
   environment {
     variables = {
-      CLOUDFRONT_DOMAIN_NAME            = var.cloudfront_domain_name
       CLOUDFRONT_PUBLIC_KEY_ID          = var.cloudfront_public_key_id
       CLOUDFRONT_PRIVATE_KEY_SECRET_ARN = var.cloudfront_private_key_secret_arn
     }
