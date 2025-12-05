@@ -10,9 +10,9 @@ data "archive_file" "upload_service_zip" {
 # 2. Definición de la Lambda de Upload Service
 resource "aws_lambda_function" "upload_service" {
   function_name = "VOD-${var.environment}-UploadService"
-  role          = aws_iam_role.lambda_exec_role.arn
+  role          = var.lambda_exec_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
 
   filename         = data.archive_file.upload_service_zip.output_path
   source_code_hash = data.archive_file.upload_service_zip.output_base64sha256
@@ -33,9 +33,9 @@ data "archive_file" "signer_service_zip" {
 
 resource "aws_lambda_function" "signer_service" {
   function_name = "VOD-${var.environment}-SignerService"
-  role          = aws_iam_role.lambda_exec_role.arn
+  role          = var.lambda_exec_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   timeout       = 10
 
   filename         = data.archive_file.signer_service_zip.output_path
@@ -58,9 +58,9 @@ data "archive_file" "ai_service_zip" {
 
 resource "aws_lambda_function" "ai_service" {
   function_name = "VOD-${var.environment}-AIService"
-  role          = aws_iam_role.ai_service_role.arn
+  role          = var.ai_service_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   timeout       = 30
 
   filename         = data.archive_file.ai_service_zip.output_path
@@ -84,9 +84,9 @@ data "archive_file" "metadata_service_zip" {
 
 resource "aws_lambda_function" "metadata_service" {
   function_name = "VOD-${var.environment}-MetadataService"
-  role          = aws_iam_role.lambda_exec_role.arn
+  role          = var.lambda_exec_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   timeout       = 30
 
   filename         = data.archive_file.metadata_service_zip.output_path
@@ -108,9 +108,9 @@ data "archive_file" "search_service_zip" {
 
 resource "aws_lambda_function" "search_service" {
   function_name = "VOD-${var.environment}-SearchService"
-  role          = aws_iam_role.lambda_exec_role.arn
+  role          = var.lambda_exec_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   timeout       = 30
 
   filename         = data.archive_file.search_service_zip.output_path
@@ -133,9 +133,9 @@ data "archive_file" "video_processing_zip" {
 # 4. Definición de la Lambda de Video Processing Service
 resource "aws_lambda_function" "video_processing" {
   function_name = "VOD-${var.environment}-VideoProcessingService"
-  role          = aws_iam_role.lambda_exec_role.arn
+  role          = var.lambda_exec_role_arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs18.x"
   timeout       = 30
 
   filename         = data.archive_file.video_processing_zip.output_path

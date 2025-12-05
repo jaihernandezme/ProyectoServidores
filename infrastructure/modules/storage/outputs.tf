@@ -12,7 +12,7 @@ output "processed_bucket_name" {
 
 output "frontend_bucket_website_endpoint" {
   description = "El endpoint del sitio web del bucket S3 del frontend."
-  value       = aws_s3_bucket.frontend.website_endpoint
+  value       = aws_s3_bucket_website_configuration.frontend_website.website_endpoint
 }
 
 output "processed_bucket_regional_domain_name" {
